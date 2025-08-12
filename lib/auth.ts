@@ -3,8 +3,17 @@
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 
-const TOKEN_COOKIE_NAME = "auth_token"
-const API_BASE_URL = "https://api-yeshtery.dev.meetusvr.com/v1"
+// Environment variables with fallbacks
+const getEnvVar = (key: string, defaultValue?: string): string => {
+  const value = process.env[key] ?? defaultValue
+  if (value === undefined) {
+    throw new Error(`Missing required environment variable: ${key}`)
+  }
+  return value
+}
+
+const TOKEN_COOKIE_NAME = getEnvVar('AUTH_TOKEN_NAME', 'auth_token')
+const API_BASE_URL = getEnvVar('NEXT_PUBLIC_API_BASE_URL', 'https://api-yeshtery.dev.meetusvr.com/v1')
 
 // Server Action for Login
 export async function loginUser(prevState: { message: string | null }, formData: FormData) {
